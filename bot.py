@@ -36,13 +36,17 @@ def mudar_janela(titulo_janela):
 def ler_tela(bot):
     # x0,y0 = 70,250
     # x1, y1 = 425, 525
-    screen_cut_temp = bot.screen_cut(x=70, y=250, width=(425-70), height=(350-250))
-    screen_cut_temp.save('screen_temp.png')
-    text = pytesseract.image_to_string(screen_cut_temp)
-    padrao = r'\d{2}\/\d{2}\/\d{4}'
-    numeros_lote = re.findall(padrao, text, re.MULTILINE)
-    
-    quantidade_lotes = len(numeros_lote)
+    quantidade_lotes = 0
+    while quantidade_lotes == 0:
+        screen_cut_temp = bot.screen_cut(x=70, y=250, width=(425-70), height=(350-250))
+        screen_cut_temp.save('screen_temp.png')
+
+        text = pytesseract.image_to_string(screen_cut_temp)
+        padrao = r'\d{2}\/\d{2}\/\d{4}'
+        
+        numeros_lote = re.findall(padrao, text, re.MULTILINE)
+        quantidade_lotes = len(numeros_lote)
+        
     mes = numeros_lote[0].split('/')[1]
 
     return quantidade_lotes, mes
