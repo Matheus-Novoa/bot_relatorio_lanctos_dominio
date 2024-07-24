@@ -82,7 +82,7 @@ for n in np.ones(quantidade_notas):
             not_found("botao_janela_impressao")
         bot.click()
 
-        if not bot.find("botao_cancelar(teste).png", matching=0.97, waiting_time=10000):
+        if not bot.find("botao_cancelar(teste)", matching=0.97, waiting_time=10000):
             not_found("botao_cancelar(teste)")
         bot.click()
         
