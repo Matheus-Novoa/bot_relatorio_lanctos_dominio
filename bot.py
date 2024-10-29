@@ -1,30 +1,13 @@
 from botcity.core import DesktopBot
-import pygetwindow as gw
-import pyautogui
 import pytesseract
 import re
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 import numpy as np
-import time
                    
 
 
 def not_found(label):
     print(f"Element not found: {label}")
-
-
-
-def mudar_janela(titulo_janela):
-    janelas = gw.getWindowsWithTitle(titulo_janela) # Obtém todas as janelas com o título especificado
-    # Verifica se foi encontrada alguma janela com o título especificado
-    if janelas:
-        janela = janelas[0] # Seleciona a primeira janela encontrada (você pode iterar sobre a lista para selecionar a janela desejada)
-        janela.activate() # Foca na janela (torna-a ativa)
-    else:
-        print("Nenhuma janela encontrada com o título especificado.")
-    time.sleep(1)
-    pyautogui.hotkey('alt', 'esc')
-
 
 
 def ler_tela(bot):
@@ -53,10 +36,9 @@ def ler_tela(bot):
 
 
 def main(numero_primeiro_lote, mes, quantidade_notas = 150):
+    
     bot = DesktopBot()
-
-    # mudar_janela('Lista de Programas')
-    mudar_janela('Domínio Contabilidade Fiscal - Versão: 10.4A-07 - 07')
+    bot.wait(4000)
 
     lotes_unicos = []
 
@@ -116,5 +98,5 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
 
 if __name__ == '__main__':
   numero_primeiro_lote = 30500
-  mes = '05'
-  lotes = main(numero_primeiro_lote, mes)
+  mes = '06'
+  lotes = main(numero_primeiro_lote, mes, 3)
