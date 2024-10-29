@@ -6,8 +6,6 @@ import re
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 import numpy as np
 import time
-import PySimpleGUI as sg
-from gui import gui
                    
 
 
@@ -23,8 +21,7 @@ def mudar_janela(titulo_janela):
         janela = janelas[0] # Seleciona a primeira janela encontrada (você pode iterar sobre a lista para selecionar a janela desejada)
         janela.activate() # Foca na janela (torna-a ativa)
     else:
-        # print("Nenhuma janela encontrada com o título especificado.")
-        sg.popup_error("Nenhuma janela encontrada com o título especificado.")
+        print("Nenhuma janela encontrada com o título especificado.")
     time.sleep(1)
     pyautogui.hotkey('alt', 'esc')
 
@@ -80,8 +77,7 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
         except:
             if not bot.find("janela_fim", matching=0.97, waiting_time=10000):
                 not_found("janela_fim")
-            # print('Sem mais lotes para emitir')
-            sg.popup('Sem mais lotes para emitir')
+            print('Sem mais lotes para emitir')
             break
 
         # print(mes_lote)
@@ -109,8 +105,7 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
                 not_found("botao_fechar_lancamento")
             bot.click()
         else:
-            # print('Mês incompatível')
-            sg.popup_error('Mês incompatível')
+            print('Mês incompatível')
             break
         numero_primeiro_lote += int(n)
 
@@ -120,13 +115,6 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
 
 
 if __name__ == '__main__':
-    while True:
-        numero_primeiro_lote, mes, event= gui()
-        if event == None:
-            break
-        numero_primeiro_lote = int(numero_primeiro_lote)
-        lotes = main(numero_primeiro_lote, mes)
-        break
-    window_fim = sg.Window(title='Fim', layout=[[sg.Output(s=(15, 2))]])
-    events, values = window_fim.read()
-    print(lotes)
+  numero_primeiro_lote = 30500
+  mes = '05'
+  lotes = main(numero_primeiro_lote, mes)
