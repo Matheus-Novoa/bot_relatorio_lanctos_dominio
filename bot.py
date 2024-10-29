@@ -62,10 +62,9 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
             print('Sem mais lotes para emitir')
             break
 
-        # print(mes_lote)
         if mes == mes_lote:
             if quantidade_lotes == 1:
-                # print('Registro único')
+                print('Registro único')
                 lotes_unicos.append(numero_primeiro_lote)
 
                 if not bot.find("botao_fechar_lancamento", matching=0.97, waiting_time=10000):
