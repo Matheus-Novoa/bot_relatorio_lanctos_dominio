@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "bot-relatorio-lanctos-dominio"
+version = "0.1.0"
+description = ""
+authors = ["Matheus-Novoa <65021130+Matheus-Novoa@users.noreply.github.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+botcity-framework-core = "^1.2.1"
+pytesseract = "^0.3.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -78,6 +78,10 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
                 not_found("botao_janela_impressao")
             bot.click()
 
+            # if not bot.find("botao_ok_impressao", matching=0.97, waiting_time=10000):
+            #     not_found("botao_ok_impressao")
+            # bot.click()
+
             if not bot.find("botao_cancelar(teste)", matching=0.97, waiting_time=10000):
                 not_found("botao_cancelar(teste)")
             bot.click()
@@ -96,6 +100,6 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
 
 
 if __name__ == '__main__':
-  numero_primeiro_lote = 30500
-  mes = '06'
+  numero_primeiro_lote = 36329
+  mes = '05'
   lotes = main(numero_primeiro_lote, mes, 3)
