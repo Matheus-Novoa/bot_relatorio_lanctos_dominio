@@ -10,6 +10,8 @@ package-mode = false
 python = "^3.12"
 botcity-framework-core = "^1.2.1"
 pytesseract = "^0.3.13"
+customtkinter = "^5.2.2"
+pyautogui = "^0.9.54"
 
 
 [build-system]

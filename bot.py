@@ -3,11 +3,14 @@ import pytesseract
 import re
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 import numpy as np
+from pyautogui import alert
+import customtkinter as ctk
                    
 
 
 def not_found(label):
-    print(f"Element not found: {label}")
+    msgAlerta = f'Deixe o domínio na janela inicial e rode o programa novamente a partir do último número de lote'
+    alert(text=msgAlerta, title=f'Elemento não encontrado: {label}')
 
 
 def ler_tela(bot):
@@ -59,12 +62,12 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
         except:
             if not bot.find("janela_fim", matching=0.97, waiting_time=10000):
                 not_found("janela_fim")
-            print('Sem mais lotes para emitir')
+            alert('Sem mais lotes para emitir')
             break
 
         if mes == mes_lote:
             if quantidade_lotes == 1:
-                print('Registro único')
+                # alert(title='Registro único', text='Digite manualmente o intervalo de lotes únicos')
                 lotes_unicos.append(numero_primeiro_lote)
 
                 if not bot.find("botao_fechar_lancamento", matching=0.97, waiting_time=10000):
@@ -90,7 +93,7 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
                 not_found("botao_fechar_lancamento")
             bot.click()
         else:
-            print('Mês incompatível')
+            alert('Mês incompatível')
             break
         numero_primeiro_lote += int(n)
 
@@ -100,6 +103,20 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
 
 
 if __name__ == '__main__':
-  numero_primeiro_lote = 36329
-  mes = '05'
-  lotes = main(numero_primeiro_lote, mes, 3)
+    ctk.set_appearance_mode('system')
+
+    janela = ctk.CTk()
+    janela.geometry('500x200')
+
+    numeroLoteInicial = ctk.CTkEntry(janela, placeholder_text='número do lote')
+    numeroLoteInicial.pack()
+
+    mes = ctk.CTkEntry(janela, placeholder_text='mes')
+    mes.pack()
+
+    botao = ctk.CTkButton(janela,
+                          text='Iniciar',
+                          command=lambda: main(int(numeroLoteInicial.get()), mes.get()))
+    botao.pack()
+
+    janela.mainloop()
