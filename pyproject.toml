@@ -12,6 +12,7 @@ botcity-framework-core = "^1.2.1"
 pytesseract = "^0.3.13"
 customtkinter = "^5.2.2"
 pyautogui = "^0.9.54"
+opencv-python = "^4.10.0.84"
 
 
 [build-system]

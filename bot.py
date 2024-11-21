@@ -5,12 +5,25 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 import numpy as np
 from pyautogui import alert
 import customtkinter as ctk
+from pathlib import Path
+import cv2
                    
 
 
 def not_found(label):
     msgAlerta = f'Deixe o domínio na janela inicial e rode o programa novamente a partir do último número de lote'
     alert(text=msgAlerta, title=f'Elemento não encontrado: {label}')
+
+
+def preprocess_image(image_path):
+    # Carrega a imagem
+    image = cv2.imread(image_path)
+    # Converte para escala de cinza
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Aplica binarização (usar o método adaptativo pode ajudar dependendo da imagem)
+    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    
+    return binary_image
 
 
 def ler_tela(bot):
@@ -26,7 +39,8 @@ def ler_tela(bot):
         screen_cut_temp = bot.screen_cut(x=70, y=250, width=(425-70), height=(350-250))
         screen_cut_temp.save('screen_temp.png')
 
-        text = pytesseract.image_to_string(screen_cut_temp)
+        processed_image = preprocess_image('screen_temp.png')
+        text = pytesseract.image_to_string(processed_image)
         padrao = r'\d{2}\/\d{2}\/\d{4}'
         
         numeros_lote = re.findall(padrao, text, re.MULTILINE)
@@ -97,26 +111,13 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
             break
         numero_primeiro_lote += int(n)
 
-    # print(f'Lotes com apenas 1 lançamento: {lotes_unicos}')
-    return f'Lotes com apenas 1 lançamento: {lotes_unicos}'
+    arquivoLotesUnicos = Path.home()/'OneDrive/Área de Trabalho/lotes_unicos.txt'
+    with open(arquivoLotesUnicos, 'w') as f:
+        f.write(f'Lotes com apenas 1 lançamento: {lotes_unicos}')
+
+    Path('screen_temp.png').unlink()
 
 
 
 if __name__ == '__main__':
-    ctk.set_appearance_mode('system')
-
-    janela = ctk.CTk()
-    janela.geometry('500x200')
-
-    numeroLoteInicial = ctk.CTkEntry(janela, placeholder_text='número do lote')
-    numeroLoteInicial.pack()
-
-    mes = ctk.CTkEntry(janela, placeholder_text='mes')
-    mes.pack()
-
-    botao = ctk.CTkButton(janela,
-                          text='Iniciar',
-                          command=lambda: main(int(numeroLoteInicial.get()), mes.get()))
-    botao.pack()
-
-    janela.mainloop()
+    ...
