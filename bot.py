@@ -61,6 +61,7 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
     for n in np.ones(quantidade_notas):
         if not bot.find("campo_numero_lote_inicial", matching=0.97, waiting_time=10000):
             not_found("campo_numero_lote_inicial")
+
         bot.click_relative(87, 35, clicks=2)
         bot.type_key(str(numero_primeiro_lote))
         bot.tab()
@@ -107,7 +108,10 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
                 not_found("botao_fechar_lancamento")
             bot.click()
 
-            bot.wait(500)
+            count = 0
+            while (bot.find("botao_fechar_lancamento", matching=0.97, waiting_time=1500)) and (count < 10):
+                bot.click()
+                bot.wait(500)
         else:
             alert('Mês incompatível')
             break
