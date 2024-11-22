@@ -109,7 +109,7 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
             bot.click()
 
             count = 0
-            while (bot.find("botao_fechar_lancamento", matching=0.97, waiting_time=1500)) and (count < 10):
+            while (bot.find("botao_fechar_lancamento", matching=0.97, waiting_time=1000)) and (count < 10):
                 bot.click()
                 bot.wait(500)
         else:
