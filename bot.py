@@ -33,7 +33,7 @@ def ler_tela(bot):
     while (quantidade_lotes == 0) and (n_tentativas < 7):
         
         n_tentativas += 1
-        bot.wait(500)
+        bot.wait(1000)
         
         screen_cut_temp = bot.screen_cut(x=70, y=250, width=(425-70), height=(350-250))
         screen_cut_temp.save('screen_temp.png')
