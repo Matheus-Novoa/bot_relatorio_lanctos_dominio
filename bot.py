@@ -17,12 +17,27 @@ def not_found(label):
 def preprocess_image(image_path):
     # Carrega a imagem
     image = cv2.imread(image_path)
+
     # Converte para escala de cinza
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # Aplica binarização (usar o método adaptativo pode ajudar dependendo da imagem)
-    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    
-    return binary_image
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Aplica CLAHE para melhorar o contraste
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
+    enhanced = clahe.apply(gray)
+
+    # Aplica um desfoque para reduzir ruído
+    blurred = cv2.GaussianBlur(enhanced, (5,5), 0)
+
+    # Aplica binarização Otsu
+    _, binary = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+    # Aumenta a resolução para melhorar a precisão do OCR
+    scale_percent = 300  # Aumenta em 300%
+    width = int(binary.shape[1] * scale_percent / 100)
+    height = int(binary.shape[0] * scale_percent / 100)
+    resized = cv2.resize(binary, (width, height), interpolation=cv2.INTER_CUBIC)
+
+    return resized
 
 
 def ler_tela(bot):
@@ -39,8 +54,14 @@ def ler_tela(bot):
         screen_cut_temp.save('screen_temp.png')
 
         processed_image = preprocess_image('screen_temp.png')
-        text = pytesseract.image_to_string(processed_image)
-        padrao = r'\d{2}\/\d{2}\/\d{4}'
+        bot.wait(1000)
+        # Configuração do OCR
+        custom_config = r'--oem 3 --psm 6'  # Ajusta a segmentação de texto para melhor precisão
+
+        # Executa OCR na imagem processada
+        text = pytesseract.image_to_string(processed_image, config=custom_config)
+        print(text)
+        padrao = r'\d{1,2}\/\d{2}\/\d{4}'
         
         numeros_lote = re.findall(padrao, text, re.MULTILINE)
         quantidade_lotes = len(numeros_lote)
@@ -77,7 +98,7 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
             if not bot.find("janela_fim", matching=0.97, waiting_time=10000):
                 not_found("janela_fim")
             alert('Sem mais lotes para emitir')
-            break
+            raise
 
         if mes == mes_lote:
             if quantidade_lotes == 1:
@@ -126,4 +147,4 @@ def main(numero_primeiro_lote, mes, quantidade_notas = 150):
 
 
 if __name__ == '__main__':
-    ...
+    main(32405, '11')
